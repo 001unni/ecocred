@@ -1,0 +1,22 @@
+{% extends "adminindex.html" %}
+{% block body %}
+  <div class="container mt-5" style="max-width: 500px;">
+    <h3 class="mb-4 text-center">Send Reply</h3>
+    <div id="message" class="mb-3"></div>
+    <form id="changePasswordForm" method="post" action="/myapp/sentreply_post/">
+        {% csrf_token %}
+      <div class="mb-3">
+          <input type="hidden" name="id" value="{{ id }}">
+        <label for="reply" class="form-label">send reply</label>
+          <textarea class="bootstrap" id="reply" name="reply" required></textarea>
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100">send</button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById("changePasswordForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const current = document
+        {% endblock %}

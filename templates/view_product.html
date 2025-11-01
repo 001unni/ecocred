@@ -1,0 +1,85 @@
+{% extends "adminindex.html" %}
+{% block body %}
+  <div class="container mt-5">
+    <h2 class="mb-4">Products</h2>
+
+    <!-- Add Service Button -->
+
+
+    <!-- Service Table -->
+    <table id="servicesTable" class="table table-striped table-bordered">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>Token</th>
+          <th>Description</th>
+          <th>Photo</th>
+          <th>Category</th>
+          <th></th>
+
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Sample Data -->
+        {%  for i in data %}
+        <tr>
+          <td>{{ forloop.counter }}</td>
+          <td>{{ i.name }}</td>
+          <td>{{ i.tokens }}</td>
+          <td>{{ i.description }}</td>
+          <td><img src="{{ i.image }}" height="100" width="100"></td>
+          <td>{{ i.category }}</td>
+          <td>
+            <a href="/myapp/edit_product_get/{{ i.id }}" class="btn btn-warning btn-sm">Edit</a>
+            <a href="/myapp/delete_product/{{ i.id }}" onclick="return confirm('ARE U SURE ?')" class="btn btn-danger btn-sm" >Delete</a>
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Add Service Modal -->
+
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+
+  <script>
+    $(document).ready(function () {
+      let table = $('#servicesTable').DataTable();
+
+      // Handle Add Service Form
+      $('#addServiceForm').on('submit', function (e) {
+        e.preventDefault();
+
+        // Get form data
+        let serviceName = $(this).find('input[name="serviceName"]').val();
+        let description = $(this).find('textarea[name="description"]').val();
+        let price = $(this).find('input[name="price"]').val();
+
+        // Add new row to DataTable
+        let newRow = table.row.add([
+          table.rows().count() + 1,
+          serviceName,
+          description,
+          price,
+          `<button class="btn btn-warning btn-sm">Edit</button>
+           <button class="btn btn-danger btn-sm">Delete</button>`
+        ]).draw();
+
+        // Reset form and close modal
+        this.reset();
+        $('#addServiceModal').modal('hide');
+      });
+
+      // Handle Delete
+      $('#servicesTable').on('click', '.btn-danger', function () {
+        table.row($(this).parents('tr')).remove().draw();
+      });
+    });
+  </script>
+{% endblock %}
